@@ -1,11 +1,17 @@
 import React from "react";
 import Sidebar from './Sidebar'
 import Textarea from "./Textarea";
-import {useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 function NoteApp(props) {
   const navigate = useNavigate();
-  const [notes, setNotes] = React.useState([]);
+  
+
+  const [notes, setNotes] = React.useState(() =>{
+    const storedNotes = localStorage.getItem("notes");
+    return storedNotes ? JSON.parse(storedNotes) : [];
+  });
+  
   const [title, setTitle] = React.useState("Untitled");
   const [textContent, setTextContent] = React.useState("");
   const [isEditMode, setIsEditMode] = React.useState(true);
@@ -70,8 +76,17 @@ function NoteApp(props) {
   function onDelete() {
     const answer = window.confirm("Are you sure?");
     if (answer){
-      setNotes(notes.filter((_, index) => index !== activeNote));
+      const newNotes = notes.filter((_, index) => index !== activeNote);
+      setNotes(newNotes);
+      localStorage.setItem("notes", JSON.stringify(newNotes));
       setActiveNote(-1);
+      if (newNotes.length > 0) {
+        setActiveNote(0);
+        const currNote = newNotes[0];
+        setTextContent(currNote.content);
+        setTitle(currNote.title);
+        setDateTime(currNote.dateTime);
+      }
     } else {
        setActiveNote(0);
        const currNote = notes.at(0);

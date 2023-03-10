@@ -1,10 +1,10 @@
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useNavigate } from "react-router-dom";
+
 
 
 function Textarea(props) {
-  const navigate = useNavigate
+  
   const modules = {
     toolbar: [
       [{ font: [] }],
@@ -36,7 +36,11 @@ function Textarea(props) {
 
     props.onEditToggle();
     props.onAdd(noteObj);
-    navigate(`/notes/${noteObj.id}`);
+    
+
+    const notes = JSON.parse(localStorage.getItem("notes") || "[]");
+    notes.push(noteObj);
+    localStorage.setItem("notes", JSON.stringify(notes));
   }
 
   return ( 

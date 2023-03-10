@@ -1,8 +1,8 @@
 
 function Header(props){
     return(
-    <nav><div class="navflex">
-        <div class="menu">
+    <nav><div className="navflex">
+        <div className="menu">
             <button className="button" onClick={props.toggleNotes}>&#9776;</button>
         </div>
         <div className ="header" >
