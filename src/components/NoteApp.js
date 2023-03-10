@@ -1,12 +1,12 @@
 import React from "react";
 import Sidebar from './Sidebar'
 import Textarea from "./Textarea";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 function NoteApp(props) {
   const navigate = useNavigate();
-  
 
+  const { id } = useParams();
   const [notes, setNotes] = React.useState(() =>{
     const storedNotes = localStorage.getItem("notes");
     return storedNotes ? JSON.parse(storedNotes) : [];
@@ -22,6 +22,18 @@ function NoteApp(props) {
     .slice(0, 19);
   const [dateTime, setDateTime] = React.useState(currDateTime);
 
+  React.useEffect(() => {
+    setActiveNote(parseInt(id, 10) - 1);
+  }, [id]);
+
+  React.useEffect(() => {
+    if (notes.length > 0 && activeNote >= 0 && activeNote < notes.length) {
+      const currNote = notes[activeNote];
+      setTextContent(currNote.content);
+      setTitle(currNote.title);
+      setDateTime(currNote.dateTime);
+    }
+  }, [notes, activeNote]);
   function onTitleChange(event) {
     const title = event.target.value;
     setTitle(title);
@@ -39,7 +51,7 @@ function NoteApp(props) {
       ...notes.slice(activeNote + 1),
       
     ]);
-    navigate (`/notes/${activeNote+1}`);
+    
     
   }
 
@@ -59,26 +71,28 @@ function NoteApp(props) {
   }
 
   function onEditToggle() {
-   
     setIsEditMode(!isEditMode);
-    navigate(`/notes/${activeNote}/edit`);
+    if(activeNote !== undefined){
+    navigate(`/notes/${activeNote + 1}/edit`);
+    }
   }
 
   function onNoteClick(noteID) {
     setActiveNote(noteID);
-    const currNote = notes.at(noteID);
+    const currNote = notes[noteID];
     setTextContent(currNote.content);
     setTitle(currNote.title);
     setDateTime(currNote.dateTime);
-    navigate(`/notes/${noteID+1 }`);
+    navigate(`/notes/${noteID + 1}`);
   }
+  
 
   function onDelete() {
     const answer = window.confirm("Are you sure?");
     if (answer){
       const newNotes = notes.filter((_, index) => index !== activeNote);
       setNotes(newNotes);
-      localStorage.setItem("notes", JSON.stringify(newNotes));
+      localStorage.setItem();
       setActiveNote(-1);
       if (newNotes.length > 0) {
         setActiveNote(0);

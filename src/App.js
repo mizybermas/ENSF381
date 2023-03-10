@@ -7,10 +7,11 @@ import { useState,useEffect } from "react";
 function App() {
   const [isNoteVisable, setVisability] = React.useState(true);
   const [notes, setNotes] = useState([]);
-
+ 
   useEffect(() => {
     const notesFromStorage = JSON.parse(localStorage.getItem("notes") || "[]");
     setNotes(notesFromStorage);
+    
   }, []);
 
   function hideItem() {
@@ -22,10 +23,10 @@ function App() {
       <Header toggleNotes={hideItem} />
       <BrowserRouter>
       <Routes>
-        <Route path="/" element={<NoteApp isVisable={isNoteVisable} />} />
-        <Route path="/notes" element={<NoteApp isVisable={isNoteVisable} />} />
-          <Route path="/notes/:id" element={<NoteApp isVisable={isNoteVisable} />} />
-          <Route path="/notes/:id/edit" element={<NoteApp isVisable={isNoteVisable} />} />
+        <Route path="/" element={<NoteApp isVisable={isNoteVisable} notes={notes}/>} />
+        <Route path="/notes" element={<NoteApp isVisable={isNoteVisable} notes={notes}/>} />
+          <Route path="/notes/:id" element={<NoteApp isVisable={isNoteVisable} notes={notes}/>} />
+          <Route path="/notes/:id/edit" element={<NoteApp isVisable={isNoteVisable} notes={notes}/>} />
 
       </Routes>
       </BrowserRouter>
