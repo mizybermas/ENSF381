@@ -41,18 +41,17 @@ function NoteApp(props) {
 
   function onTextChange(event) {
     setTextContent(event); 
-  
+    
   }
-
   function addNote(newNote) {
     setNotes([
       ...notes.slice(0, activeNote),
       newNote,
       ...notes.slice(activeNote + 1),
-      
     ]);
-    
-    
+    const url = isEditMode ? `/notes/${activeNote + 1}` : `/notes/${activeNote + 1}/edit`;
+    navigate(url);
+  
   }
 
   function newNote() {
@@ -62,8 +61,8 @@ function NoteApp(props) {
     setTextContent("");
     setTitle("Untitled");
     setDateTime(newCurrDateTime);
-    setNotes((prevNotes) => {
-      return [...prevNotes, { title: "Untitled", content: "", dateTime: "" }];
+    setNotes((prevNotes) => 
+      {return [...prevNotes, { title: "Untitled", content: "", dateTime: newCurrDateTime }];
     });
     setActiveNote(notes.length);
     setIsEditMode(true);
@@ -72,10 +71,9 @@ function NoteApp(props) {
 
   function onEditToggle() {
     setIsEditMode(!isEditMode);
-    if(activeNote !== undefined){
     navigate(`/notes/${activeNote + 1}/edit`);
     }
-  }
+  
 
   function onNoteClick(noteID) {
     setActiveNote(noteID);
@@ -92,7 +90,7 @@ function NoteApp(props) {
     if (answer){
       const newNotes = notes.filter((_, index) => index !== activeNote);
       setNotes(newNotes);
-      localStorage.setItem();
+      localStorage.setItem("notes", JSON.stringify(newNotes));
       setActiveNote(-1);
       if (newNotes.length > 0) {
         setActiveNote(0);
@@ -120,28 +118,28 @@ function NoteApp(props) {
           activeNote={activeNote}
           setActiveNote={onNoteClick}
         />
-        
       )}
-      {activeNote !== -1 && (
-        <Textarea
-          onAdd={addNote}
-          onTitleChange={onTitleChange}
-          onContentChange={onTextChange}
-          title={title}
-          textContent={textContent}
-          setDateTime={setDateTime}
-          dateTime={dateTime}
-          isEditMode={isEditMode}
-          onEditToggle={onEditToggle}
-          activeNote={activeNote}
-          onDelete={onDelete}
-        />
-      )}
-      
-    </div>
-    
-  );
-
-}
+        {activeNote !== -1 ? (
+          <Textarea
+            onAdd={addNote}
+            onTitleChange={onTitleChange}
+            onContentChange={onTextChange}
+            title={title}
+            textContent={textContent}
+            setDateTime={setDateTime}
+            dateTime={dateTime}
+            isEditMode={isEditMode}
+            onEditToggle={onEditToggle}
+            activeNote={activeNote}
+            onDelete={onDelete}
+          />
+        ) : (
+          <div className="initial-text">
+            <p className="initial-text-p">Select a note, or create a new one.</p>
+          </div>
+        )}
+      </div>
+    );
+  }
 
 export default NoteApp;

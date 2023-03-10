@@ -15,20 +15,23 @@ function Sidebar(props) {
         </div>
       </div>
       <div className="scroller">
-        {props.notesList.map((noteItem, index) => {
-          return (
-            <Note
-              key={index}
-              id={index }
-              title={noteItem.title}
-              dateTime={noteItem.dateTime}
-              content={noteItem.content}
-              setActiveNote={props.setActiveNote}
-              activeNote={props.activeNote}
-            />
-          );
-        })}
-        
+        {props.activeNote !== -1 ? (
+          props.notesList.map((noteItem, index) => {
+            return (
+              <Note
+                key={index}
+                id={index}
+                title={noteItem.title}
+                dateTime={noteItem.dateTime}
+                content={noteItem.content}
+                setActiveNote={props.setActiveNote}
+                activeNote={props.activeNote}
+              />
+            );
+          })
+        ) : (
+          <p className="no-note">No Notes Yet</p>
+        )}
       </div>
     </div>
   );

@@ -129,6 +129,8 @@ nav{
   overflow: hidden;
   text-overflow: ellipsis;
   width: 85%;
+  cursor:default;
+  user-select:none;
 }
 
 .note-title:focus {
@@ -211,4 +213,22 @@ nav{
 
 .note-active {
   background-color: rgb(128, 128, 128);
+}
+.no-note{
+  font-weight:bold;
+  color: grey;
+  text-align: center;
+  padding-top:5%;
+}
+
+.initial-text-p{
+  text-align: center;
+  font-weight:bold;
+  color: grey;
+  padding-top: calc(50vh - 60px);
+  padding-top:auto;
+}
+.initial-text{
+  width:100%;
+  height:100%;
 }

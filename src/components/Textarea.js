@@ -1,8 +1,6 @@
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-
-
 function Textarea(props) {
   
   const modules = {
@@ -25,7 +23,6 @@ function Textarea(props) {
   
    props.setDateTime(event.target.value);
    }
-
 
    function submitNote() {
     const noteObj = {
