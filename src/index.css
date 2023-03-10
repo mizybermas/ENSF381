@@ -204,3 +204,11 @@ nav{
 .ql-editor > p {
   word-break: break-word;
 }
+
+.text-editor.hidden .ql-toolbar {
+  visibility: hidden;
+}
+
+.note-active {
+  background-color: rgb(128, 128, 128);
+}

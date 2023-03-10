@@ -1,29 +1,34 @@
-import { v4 as uuidv4 } from 'uuid';
 import Note from "./Note";
 
+
 function Sidebar(props) {
-    function addNote(event) {
-        const noteObj = {title: "Untitled", content: "...", dateTime: "" };
-        
-        props.onAdd(noteObj);
-    }
+
   return (
     <div className="notes-container">
       <div className="note-header-flex">
         <h3 className="note-header-item">Notes</h3>
-        <div className=" plus-logo button" onClick={addNote}>&#43;</div>
+        <div
+          className="note-header-item plus-logo button"
+          onClick={props.newNote}
+        >
+          &#43;
+        </div>
       </div>
       <div className="scroller">
-        {props.sideBar.map((noteItem,index) => {
+        {props.notesList.map((noteItem, index) => {
           return (
             <Note
-                key={index}
+              key={index}
+              id={index }
               title={noteItem.title}
               dateTime={noteItem.dateTime}
               content={noteItem.content}
+              setActiveNote={props.setActiveNote}
+              activeNote={props.activeNote}
             />
           );
         })}
+        
       </div>
     </div>
   );

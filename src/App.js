@@ -1,22 +1,33 @@
 import React from "react";
 import Header from "./components/Header";
 import NoteApp from "./components/NoteApp";
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+
 
 function App() {
-  const [sidebarVisable, setVisability] = React.useState(true);
+  const [isNoteVisable, setVisability] = React.useState(true);
 
-  function minimizeSide() {
-    setVisability(!sidebarVisable);
+  function hideItem() {
+    setVisability(!isNoteVisable);
   }
 
   return (
     <div class="body">
-      <Header toggleNotes={minimizeSide} />
-      <NoteApp isVisable={sidebarVisable} />
+      <Header toggleNotes={hideItem} />
+      <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<NoteApp isVisable={isNoteVisable} />} />
+        <Route path="/notes" element={<NoteApp isVisable={isNoteVisable} />} />
+          <Route path="/notes/:id" element={<NoteApp isVisable={isNoteVisable} />} />
+          <Route path="/notes/:id/edit" element={<NoteApp isVisable={isNoteVisable} />} />
+
+      </Routes>
+      </BrowserRouter>
     </div>
   );
 }
 
-
-
 export default App;
+
+
+

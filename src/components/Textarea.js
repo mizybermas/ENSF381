@@ -1,24 +1,16 @@
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function Textarea(props) {
-  const tzoffset = new Date().getTimezoneOffset() * 60000;
-  const currDateTime = new Date(Date.now() - tzoffset)
-    .toISOString()
-    .slice(0, 19);
-
-   const [dateTime, setDateTime] = useState(currDateTime);
-
-   const [title, setTitle] = useState("Untitled");
-
-   const [textContent, setTextContent] = useState("");
-
+  const navigate = useNavigate
   const modules = {
     toolbar: [
       [{ font: [] }],
       [{ size: [] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{"color": []},{"background":[]}],
+      ["bold", "italic", "underline", "blockquote"],
       [
         { list: "ordered" },
         { list: "bullet" },
@@ -30,59 +22,63 @@ function Textarea(props) {
   };
 
    function onDateChange(event) {
-   setDateTime(event.target.value);
+  
+   props.setDateTime(event.target.value);
    }
 
-   function onTitleChange(event) {
-     const title = event.target.value;
-     setTitle(title);
-   }
 
-   function onTextChange(event) {
-     setTextContent(event);
-   }
+   function submitNote() {
+    const noteObj = {
+      title: props.title,
+      content: props.textContent,
+      dateTime: props.dateTime,
+    };
 
-   function saveNote() {
-    const noteObj = { id: props.noteId, title: title, content: textContent.replace(/<\/?p>/gi, ""), dateTime: dateTime };
-    props.onAddOrUpdateExisting(noteObj);
+    props.onEditToggle();
+    props.onAdd(noteObj);
+    navigate(`/notes/${noteObj.id}`);
   }
-  
-  
-  return (
+
+  return ( 
     <div className="note-editor">
       <div className="title-header">
         <div className="note-editor-header">
           <div className="note-editor-title">
             <input
               className="note-title"
-              contentEditable="true"
+              contentEditable={props.isEditMode}
               spellCheck="true"
-              onChange={onTitleChange}
-              value={title}
+              onChange={props.onTitleChange}
+              value={props.title}
             />
             <input
               className="datetime-selector"
               type="datetime-local"
               onChange={onDateChange}
-              value={dateTime}
+              value={props.dateTime}
+              readOnly={!props.isEditMode}
             />
           </div>
-          <div className="save-button button" onClick={saveNote}>
-            Save
+          <div className="save-button button" onClick={submitNote}>
+            {props.isEditMode ? "Save" : "Edit"}
           </div>
-          <div className="delete-button button" >Delete</div>
+          <div className="delete-button button" onClick={props.onDelete}>
+            Delete
+          </div>
         </div>
       </div>
-      <div className="text-editor">
+      <div className={`text-editor ${props.isEditMode ? "" : "hidden"}`}>
         <ReactQuill
           theme="snow"
-          value={textContent}
-          onChange={onTextChange}
+          value={props.textContent}
+          onChange={props.onContentChange}
           className="editor-input"
           modules={modules}
+          readOnly={!props.isEditMode}
         />
       </div>
     </div>
+    
   );
 }
 
